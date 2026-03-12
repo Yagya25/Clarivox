@@ -1,0 +1,107 @@
+.message-bubble {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  animation: fadeIn 0.4s ease forwards;
+  opacity: 0;
+  max-width: 85%;
+}
+
+.message-bubble--user {
+  margin-left: auto;
+  flex-direction: row-reverse;
+  animation-name: slideInRight;
+}
+
+.message-bubble--ai {
+  margin-right: auto;
+  animation-name: slideInLeft;
+}
+
+.message-bubble__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  border: 2px solid var(--border-subtle);
+}
+
+.message-bubble--ai .message-bubble__avatar {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.message-bubble--user .message-bubble__avatar {
+  border-color: var(--success);
+  box-shadow: 0 0 12px var(--success-glow);
+}
+
+.message-bubble__content {
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  flex: 1;
+}
+
+.message-bubble--user .message-bubble__content {
+  background: rgba(108, 92, 231, 0.1);
+  border-color: rgba(108, 92, 231, 0.2);
+}
+
+.message-bubble--ai .message-bubble__content {
+  background: var(--bg-glass);
+}
+
+.message-bubble__header {
+  margin-bottom: 6px;
+}
+
+.message-bubble__name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.message-bubble--ai .message-bubble__name {
+  color: var(--accent-tertiary);
+}
+
+.message-bubble--user .message-bubble__name {
+  color: var(--success);
+}
+
+.message-bubble__text {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+}
+
+.message-bubble__weaknesses {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.message-bubble__weaknesses-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--warning);
+  margin-bottom: 8px;
+}
+
+.message-bubble__weakness-chip {
+  display: block;
+  margin-bottom: 6px;
+  white-space: normal;
+  line-height: 1.4;
+}

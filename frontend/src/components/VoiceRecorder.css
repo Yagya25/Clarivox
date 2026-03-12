@@ -1,0 +1,80 @@
+.voice-recorder {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.voice-recorder__btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--border-medium);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+}
+
+.voice-recorder__btn:hover:not(:disabled) {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.voice-recorder__btn--recording {
+  border-color: var(--danger) !important;
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger) !important;
+  animation: pulse 1.5s ease-in-out infinite;
+  box-shadow: 0 0 20px var(--danger-glow) !important;
+}
+
+.voice-recorder__btn--recording::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--danger);
+  animation: ripple 1.5s ease-out infinite;
+}
+
+.voice-recorder__btn--transcribing {
+  border-color: var(--accent-primary);
+  background: rgba(108, 92, 231, 0.1);
+}
+
+.voice-recorder__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.voice-recorder__stop-icon {
+  font-size: 12px;
+}
+
+.voice-recorder__waveform {
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.voice-recorder__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.voice-recorder__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  animation: pulse 1s ease-in-out infinite;
+}

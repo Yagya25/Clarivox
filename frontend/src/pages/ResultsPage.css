@@ -1,0 +1,161 @@
+.results-page {
+  min-height: 100vh;
+  padding: 60px 0 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.results-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.results-header__badge {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+
+.results-header__title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.results-header__topic {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  font-style: italic;
+}
+
+/* Overall Score */
+.results-overall {
+  text-align: center;
+  padding: 40px;
+  margin-bottom: 40px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.results-overall__grade {
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 8px;
+  text-shadow: 0 0 40px currentColor;
+}
+
+.results-overall__score {
+  margin-bottom: 20px;
+}
+
+.results-overall__number {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.results-overall__max {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+}
+
+.results-overall__summary {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Gauges */
+.results-gauges {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+/* Bento Feedback Grid */
+.results-feedback-bento {
+  margin: 32px 0;
+  width: 100%;
+}
+
+.results-list {
+  padding: 24px;
+}
+
+.results-list__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.results-list__title--success {
+  color: var(--success);
+}
+
+.results-list__title--warning {
+  color: var(--warning);
+}
+
+.results-list ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.results-list li {
+  padding-left: 20px;
+  position: relative;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.93rem;
+}
+
+.results-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+
+/* Transcript */
+.results-transcript {
+  margin-bottom: 40px;
+}
+
+.results-transcript__messages {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Actions */
+.results-actions {
+  text-align: center;
+  padding: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .results-gauges {
+    gap: 24px;
+  }
+
+  .results-lists {
+    grid-template-columns: 1fr;
+  }
+
+  .results-overall__grade {
+    font-size: 4rem;
+  }
+}
