@@ -53,5 +53,19 @@ export const api = {
     });
     if (!res.ok) throw new Error('Transcription failed');
     return res.json();
+  },
+
+  // Analyze Face-to-Face Dual Debate
+  async analyzeDualDebate(data) {
+    const res = await fetch(`${API_BASE}/api/debate/dual-analysis`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to analyze dual debate: ${errorText}`);
+    }
+    return res.json();
   }
 };

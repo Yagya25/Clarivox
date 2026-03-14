@@ -160,6 +160,9 @@ export default function HomePage() {
     if (mode === 'mun') {
       // Navigate to MUN page (it has its own transition)
       navigate('/mun')
+    } else if (mode === 'dual') {
+      // Dual debate
+      navigate('/dual-debate')
     } else {
       // Debate: play hyperspeed then show main
       handleContinueToMain()
@@ -320,6 +323,23 @@ export default function HomePage() {
                   Represent a country in Model United Nations. Get a country brief, deliver speeches, and answer the committee's tough questions.
                 </p>
                 <span className="mode-card__badge">Diplomatic Simulation</span>
+              </div>
+
+              {/* Dual Debate Card */}
+              <div
+                className="mode-card mode-card--dual"
+                onClick={() => handleModeSelect('dual')}
+                id="mode-dual-btn"
+                role="button"
+                tabIndex={0}
+                onKeyDown={e => e.key === 'Enter' && handleModeSelect('dual')}
+              >
+                <span className="mode-card__icon">👥</span>
+                <h3 className="mode-card__title">Face-to-Face</h3>
+                <p className="mode-card__desc">
+                  Sit with a friend and take turns recording your arguments. AI analyzes both!
+                </p>
+                <span className="mode-card__badge">Local Multiplayer</span>
               </div>
             </div>
           </div>

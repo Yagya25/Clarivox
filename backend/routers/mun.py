@@ -223,6 +223,23 @@ Return ONLY the JSON, no other text."""
             "overall_impression": "A good start to your MUN journey!"
         }
 
+    # Save to Database
+    try:
+        from database import SessionLocal
+        from models.db_models import DebateSession
+        db = SessionLocal()
+        db_log = DebateSession(
+            mode="MUN",
+            topic=f"{session['committee']} - {session['topic']}",
+            max_rounds=session["round_number"],
+            winner=session["country"]
+        )
+        db.add(db_log)
+        db.commit()
+        db.close()
+    except Exception as e:
+        print(f"Failed to log MUN DebateSession: {e}")
+
     response_data = EndMUNResponse(
         session_id=session_id,
         country=session["country"],

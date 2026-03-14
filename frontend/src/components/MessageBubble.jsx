@@ -1,7 +1,55 @@
+import { useState, useEffect } from 'react'
 import './MessageBubble.css'
 
 export default function MessageBubble({ message, animDelay = 0 }) {
   const isAI = message.role === 'ai'
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+
+  useEffect(() => {
+    return () => {
+      if (isPlaying) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [isPlaying])
+
+  const toggleSpeech = () => {
+    if (!('speechSynthesis' in window)) {
+      alert("Text-to-Speech is not supported in this browser.")
+      return
+    }
+
+    if (isPlaying) {
+      if (isPaused) {
+        window.speechSynthesis.resume()
+        setIsPaused(false)
+      } else {
+        window.speechSynthesis.pause()
+        setIsPaused(true)
+      }
+    } else {
+      window.speechSynthesis.cancel() // clear any existing speech
+      const utterance = new SpeechSynthesisUtterance(message.content)
+      utterance.onend = () => {
+        setIsPlaying(false)
+        setIsPaused(false)
+      }
+      utterance.onerror = () => {
+        setIsPlaying(false)
+        setIsPaused(false)
+      }
+      window.speechSynthesis.speak(utterance)
+      setIsPlaying(true)
+      setIsPaused(false)
+    }
+  }
+
+  const stopSpeech = () => {
+    window.speechSynthesis.cancel()
+    setIsPlaying(false)
+    setIsPaused(false)
+  }
 
   return (
     <div
@@ -14,6 +62,22 @@ export default function MessageBubble({ message, animDelay = 0 }) {
       <div className="message-bubble__content">
         <div className="message-bubble__header">
           <span className="message-bubble__name">{isAI ? 'AI Opponent' : 'You'}</span>
+          {isAI && (
+            <div className="message-bubble__tts-controls">
+              <button 
+                className="tts-btn" 
+                onClick={toggleSpeech} 
+                title={isPlaying ? (isPaused ? "Resume" : "Pause") : "Read out loud"}
+              >
+                {isPlaying ? (isPaused ? '▶️' : '⏸️') : '🔊'}
+              </button>
+              {isPlaying && (
+                <button className="tts-btn" onClick={stopSpeech} title="Stop">
+                  ⏹️
+                </button>
+              )}
+            </div>
+          )}
         </div>
         <div className="message-bubble__text">{message.content}</div>
 

@@ -2,8 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from routers import debate, voice, mun
+from routers import debate, voice, mun, admin
 import os
+
+from database import engine, Base
+from models import db_models
+
+# Create tables
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Clarivox",
@@ -24,6 +30,7 @@ app.add_middleware(
 app.include_router(debate.router)
 app.include_router(voice.router)
 app.include_router(mun.router)
+app.include_router(admin.router)
 
 
 @app.get("/health")

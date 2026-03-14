@@ -75,3 +75,9 @@ class TranscriptionResponse(BaseModel):
 
 class TopicsResponse(BaseModel):
     topics: List[str]
+
+class DualDebateRequest(BaseModel):
+    topic: str
+    transcriptText: str
+    user1Name: str
+    user2Name: str

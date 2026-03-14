@@ -41,5 +41,6 @@ build/
 
 # Misc
 *.log
+*.db
 tmp/
 C/Users/yagya/Desktop/project 2/frontend/layout_bug.png

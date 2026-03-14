@@ -208,5 +208,54 @@ Respond with a strong counter-argument. Address their specific points, identify 
                 "improvements": ["Try again for a full analysis"]
             }
 
+    async def analyze_dual_debate(self, topic: str, user1_name: str, user2_name: str, transcript_text: str) -> Dict:
+        """Analyze a Face-to-Face dual user debate using LLM-based text diarization."""
+        
+        prompt = f"""You are an expert debate judge analyzing a Face-to-Face debate between two users who recorded into a single microphone.
+
+Topic: "{topic}"
+Player 1: {user1_name}
+Player 2: {user2_name}
+
+Raw Transcript:
+{transcript_text}
+
+First, use your reasoning to deduce which parts of the transcript were likely spoken by Player 1 and which by Player 2 based on their names and presumed opposing stances on the topic. 
+
+Then, provide a comprehensive analysis of the debate. Return ONLY a JSON object with this EXACT structure:
+{{
+    "user1_review": {{
+        "score": <0-100 number>,
+        "strengths": ["<strength 1>", "<strength 2>"],
+        "weaknesses": ["<weakness 1>", "<weakness 2>"]
+    }},
+    "user2_review": {{
+        "score": <0-100 number>,
+        "strengths": ["<strength 1>", "<strength 2>"],
+        "weaknesses": ["<weakness 1>", "<weakness 2>"]
+    }},
+    "comparison": [
+        {{ "dimension": "Argument Logic", "user1": "<short assessment>", "user2": "<short assessment>" }},
+        {{ "dimension": "Evidence & Examples", "user1": "<short assessment>", "user2": "<short assessment>" }},
+        {{ "dimension": "Persuasiveness", "user1": "<short assessment>", "user2": "<short assessment>" }}
+    ],
+    "winner": "<'user1' | 'user2' | 'tie'>",
+    "overall_feedback": "<A concise paragraph summarizing the debate and explaining the verdict>"
+}}
+
+Be fair, constructive, and specific to their actual arguments. Return ONLY the JSON, no Markdown formatting like ```json."""
+
+        try:
+            text = await self.call_llm(prompt)
+            text = text.strip()
+            if text.startswith("```"):
+                text = text.split("\n", 1)[1] if "\n" in text else text[3:]
+                text = text.rsplit("```", 1)[0]
+            if text.startswith("json"):
+                text = text[4:].strip()
+            return json.loads(text)
+        except Exception as e:
+            print(f"Dual analysis failed: {e}")
+            raise
 
 gemini_service = LLMService()

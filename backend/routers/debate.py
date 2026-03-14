@@ -1,8 +1,11 @@
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, HTTPException, Depends
+from sqlalchemy.orm import Session
+from database import get_db
+from models.db_models import DebateSession
 from models.schemas import (
     StartDebateRequest, StartDebateResponse, 
     DebateMessage, DebateMessageRequest, DebateMessageResponse,
-    EndDebateResponse, DebateRole, TopicsResponse
+    EndDebateResponse, DebateRole, TopicsResponse, DualDebateRequest
 )
 from services.gemini_service import gemini_service
 from services.scoring_service import scoring_service
@@ -137,6 +140,23 @@ async def end_debate(session_id: str):
         user_stance=session["user_stance"],
         transcript=session["transcript"]
     )
+    
+    # Save to Database
+    try:
+        from database import SessionLocal
+        db = SessionLocal()
+        db_log = DebateSession(
+            mode="Normal",
+            topic=session["topic"],
+            max_rounds=session["max_rounds"],
+            winner=score.get("grade", "N/A"),
+            overall_score=score.get("overall_score")
+        )
+        db.add(db_log)
+        db.commit()
+        db.close()
+    except Exception as e:
+        print(f"Failed to log DebateSession: {e}")
 
     # Build transcript with DebateMessage objects
     transcript = [
@@ -176,3 +196,37 @@ async def get_session(session_id: str):
         "max_rounds": session["max_rounds"],
         "message_count": len(session["transcript"])
     }
+
+
+@router.post("/dual-analysis")
+async def analyze_dual_debate(request: DualDebateRequest):
+    """Analyze face-to-face dual debate."""
+    import traceback
+    try:
+        analysis = await gemini_service.analyze_dual_debate(
+            topic=request.topic,
+            user1_name=request.user1Name,
+            user2_name=request.user2Name,
+            transcript_text=request.transcriptText
+        )
+        
+        # Save to Database
+        try:
+            from database import SessionLocal
+            db = SessionLocal()
+            db_log = DebateSession(
+                mode="Face-to-Face",
+                topic=request.topic,
+                max_rounds=1, # Dual debates are currently unstructured single rounds
+                winner=analysis.get("winner", "unknown")
+            )
+            db.add(db_log)
+            db.commit()
+            db.close()
+        except Exception as e:
+            print(f"Failed to log Dual DebateSession: {e}")
+            
+        return analysis
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
